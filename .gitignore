@@ -1,6 +1,16 @@
 # Data folder
 bird_dataset/
 
+# Experiment folder
+experiment/
+
+# Ideas and iterations
+ideas.txt
+models_iterations.ods
+
+# Scratch notebooks
+*.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
