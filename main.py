@@ -15,7 +15,7 @@ parser.add_argument('--batch-size', type=int, default=64, metavar='B',
 parser.add_argument('--epochs', type=int, default=10, metavar='N',
                     help='number of epochs to train (default: 10)')
 parser.add_argument('--lr', type=float, default=0.1, metavar='LR',
-                    help='learning rate (default: 0.01)')
+                    help='learning rate (default: 0.1)')
 parser.add_argument('--momentum', type=float, default=0.5, metavar='M',
                     help='SGD momentum (default: 0.5)')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
@@ -46,8 +46,13 @@ val_loader = torch.utils.data.DataLoader(
 
 # Neural network and optimizer
 # We define neural net in model.py so that it can be reused by the evaluate.py script
-from model import Net
-model = Net()
+#from torchvision.models.resnet import ResNet
+#from torchvision.models.resnet import BasicBlock
+#from models.baseline import Net
+#model = Net()
+from models.custom_resnet import ResNet
+from models.custom_resnet import BasicBlock
+model = ResNet(BasicBlock, [1, 1], num_classes=20)
 if use_cuda:
     print('Using GPU')
     model.cuda()
@@ -63,7 +68,7 @@ def train(epoch):
             data, target = data.cuda(), target.cuda()
         optimizer.zero_grad()
         output = model(data)
-        criterion = torch.nn.CrossEntropyLoss(reduction='elementwise_mean')
+        criterion = torch.nn.CrossEntropyLoss() #reduction = "elementwise_mean"
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
@@ -81,7 +86,7 @@ def validation():
             data, target = data.cuda(), target.cuda()
         output = model(data)
         # sum up batch loss
-        criterion = torch.nn.CrossEntropyLoss(reduction='elementwise_mean')
+        criterion = torch.nn.CrossEntropyLoss()
         validation_loss += criterion(output, target).data.item()
         # get the index of the max log-probability
         pred = output.data.max(1, keepdim=True)[1]
