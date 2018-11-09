@@ -1,6 +1,9 @@
 # Data folder
 bird_dataset/
 
+# CVPR Author kit
+cvpr2019AuthorKit/
+
 # Experiment folder
 experiment/
 
